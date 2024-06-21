@@ -6,11 +6,10 @@ from crewai_tools import SerperDevTool
 from crewai_tools import WebsiteSearchTool
 from crewai_tools import CSVSearchTool
 
-os.environ["OPENAI_API_KEY"] = "ZZZZ" # openAI API Key
-os.environ["SERPER_API_KEY"] = "ZZZZ" # serper.dev API key
+os.environ["OPENAI_API_KEY"] = "sk-XXX" # openAI API key
+os.environ["SERPER_API_KEY"] = "XXXX" # serper.dev API key
 
 os.environ['OPENAI_MODEL_NAME'] = 'gpt-4o' # using gpt-4o
-
 
 search_tool = SerperDevTool()
 bleeping = WebsiteSearchTool(website='https://www.bleepingcomputer.com')
@@ -35,7 +34,7 @@ writer = Agent(
   backstory="""You are a renowned Cyber security Strategist, known for your insightful and engaging articles.
   You transform complex concepts into compelling narratives.""",
   verbose=True,
-  allow_delegation=False
+  allow_delegation=True
 )
 
 timeliner = Agent(
@@ -44,7 +43,7 @@ timeliner = Agent(
     backstory="""You are an expert in intelligence investigation and extraction of timeline and key dates using Mermaid (markdown) syntax. 
     You create a list of key dates with a description of what happen based on an input you are given that show the most interesting, surprising and useful aspects of the input.""",
     verbose=True,
-    allow_delegation=False
+    allow_delegation=True
 )
 
 # Create tasks for your agents
@@ -116,7 +115,7 @@ crew = Crew(
   tasks=[research_task, create_timeline_task, write_blog_task],
   verbose=2, # You can set it to 1 or 2 to different logging levels
   manager_llm=ChatOpenAI(temperature=0.2, model="gpt-4o"),  # Mandatory for hierarchical process
-  process=Process.sequential,  # Specifies the hierarchical management approach
+  process=Process.hierarchical,  # Specifies the hierarchical management approach
 )
 
 # Get your crew to work!
